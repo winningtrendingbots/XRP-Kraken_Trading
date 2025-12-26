@@ -219,6 +219,26 @@ El bot guarda su estado en `trading_state.json` que incluye:
 
 ## 🔧 Solución de Problemas
 
+### Error: "'>=' not supported between instances of 'float' and 'NoneType'"
+
+Este error ocurre cuando los datos de Kraken contienen valores nulos. **Solución:**
+
+1. **Ejecuta el diagnóstico de datos:**
+   ```bash
+   python debug_data.py
+   ```
+   Esto te mostrará exactamente qué datos están disponibles y si hay problemas.
+
+2. **El código ya maneja este error automáticamente:**
+   - Limpia valores nulos
+   - Rellena gaps en los datos
+   - Valida antes de calcular indicadores
+
+3. **Si persiste, verifica:**
+   - Que el par de trading existe en Kraken (`XETHZUSD` para ETH/USD)
+   - Que el intervalo es válido (1, 5, 15, 30, 60, 240, 1440)
+   - Que hay liquidez en el par seleccionado
+
 ### El bot no ejecuta órdenes
 
 1. Verifica que tienes balance suficiente en Kraken

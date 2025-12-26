@@ -84,7 +84,7 @@ class ProductionConfig:
     LEVERAGE_MAX = 10
     
     # Trading Hours
-    USE_TRADING_HOURS = True
+    USE_TRADING_HOURS = False
     TRADE_EUROPEAN_SESSION = True
     TRADE_AMERICAN_SESSION = True
     TRADE_ASIAN_SESSION = False

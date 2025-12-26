@@ -75,9 +75,45 @@ class KrakenTrader:
         """
         try:
             ohlc, last = self.k.get_ohlc_data(pair, interval=interval)
+            
+            # Verificar que los datos son válidos
+            if ohlc.empty:
+                logger.error("DataFrame OHLC vacío")
+                return None
+            
+            # Asegurar nombres de columnas consistentes (minúsculas)
+            ohlc.columns = [col.lower() for col in ohlc.columns]
+            
+            # Log para debug
+            logger.info(f"OHLC descargado: {len(ohlc)} filas, columnas: {ohlc.columns.tolist()}")
+            
+            # Verificar columnas requeridas
+            required_cols = ['open', 'high', 'low', 'close', 'volume']
+            missing_cols = [col for col in required_cols if col not in ohlc.columns]
+            
+            if missing_cols:
+                logger.error(f"Columnas faltantes: {missing_cols}")
+                return None
+            
+            # Convertir a numérico y limpiar
+            for col in required_cols:
+                ohlc[col] = pd.to_numeric(ohlc[col], errors='coerce')
+            
+            # Eliminar filas con NaN en columnas críticas
+            initial_len = len(ohlc)
+            ohlc = ohlc.dropna(subset=['close', 'high', 'low'])
+            
+            if len(ohlc) < initial_len:
+                logger.warning(f"Eliminadas {initial_len - len(ohlc)} filas con NaN")
+            
+            if len(ohlc) < 50:
+                logger.error(f"Datos insuficientes después de limpieza: {len(ohlc)} filas")
+                return None
+            
             return ohlc
+            
         except Exception as e:
-            logger.error(f"Error obteniendo OHLC: {e}")
+            logger.error(f"Error obteniendo OHLC: {e}", exc_info=True)
             return None
     
     def calculate_position_size(self, balance, risk_percent, stop_loss_points, 

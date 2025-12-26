@@ -1,0 +1,50 @@
+# Trading bot - archivos sensibles
+trading_state.json
+test_state.json
+*.log
+
+# API keys y secrets (NUNCA subir)
+.env
+secrets.txt
+credentials.json
+config.ini
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Backtest results
+backtest_results*.png
+*.csv
+
+# OS
+.DS_Store
+Thumbs.db

@@ -89,6 +89,27 @@ def test_kraken_connection():
             print(f"✅ Datos OHLC descargados: {len(ohlc)} velas")
             print(f"   Desde: {ohlc.index[0]}")
             print(f"   Hasta: {ohlc.index[-1]}")
+            print(f"   Columnas: {ohlc.columns.tolist()}")
+            print(f"   Último close: ${ohlc['close'].iloc[-1]:,.2f}")
+            
+            # Verificar calidad de datos
+            null_counts = ohlc[['open', 'high', 'low', 'close', 'volume']].isnull().sum()
+            if null_counts.sum() == 0:
+                print(f"   ✅ No hay valores nulos")
+            else:
+                print(f"   ⚠️  Valores nulos: {null_counts.to_dict()}")
+                
+            # Test de cálculo de indicadores
+            print("\n🔍 Probando cálculo de indicadores...")
+            try:
+                import ta
+                adx = ta.trend.adx(ohlc['high'], ohlc['low'], ohlc['close'], window=14)
+                rsi = ta.momentum.rsi(ohlc['close'], window=14)
+                print(f"   ✅ ADX: {adx.iloc[-1]:.2f}")
+                print(f"   ✅ RSI: {rsi.iloc[-1]:.2f}")
+            except Exception as e:
+                print(f"   ❌ Error calculando indicadores: {e}")
+                return False
         else:
             print("❌ Error descargando datos OHLC")
             return False

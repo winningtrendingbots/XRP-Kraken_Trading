@@ -1,0 +1,94 @@
+================================================================================
+  COMPLETE VOLUME + OHLC TRADING STRATEGY V2
+================================================================================
+
+⚙️  Configuration:
+   Accel bars:           2
+   Trailing stop:        True (Start: 25, Step: 15)
+   Profit close:         50 points
+   Max daily loss:       $-20
+   Same direction only:  False
+   Trading hours:        True
+   Sessions:             Asian=False, EU=True, US=True
+
+📥 Downloading XRP-USD data...
+   Period: 2y, Interval: 1h
+   ✅ Downloaded 17513 rows from 2023-12-26 to 2025-12-26
+
+📈 Calculating indicators...
+📊 Volume derivatives:
+   Max positive accel: 7
+   Max negative accel: -4
+
+🎯 Signal Diagnostics:
+   Volume signals:       719
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   FINAL SIGNALS:        719 (370 buy, 349 sell)
+
+🚀 Running backtest...
+   ⚠️  Daily loss limit hit: $-23.37
+   ⚠️  Daily loss limit hit: $-24.66
+   ⚠️  Daily loss limit hit: $-28.54
+   ⚠️  Daily loss limit hit: $-26.81
+   ⚠️  Daily loss limit hit: $-38.88
+   ⚠️  Daily loss limit hit: $-37.72
+   ⚠️  Daily loss limit hit: $-20.50
+   ⚠️  Daily loss limit hit: $-37.36
+   ⚠️  Daily loss limit hit: $-41.35
+   ⚠️  Daily loss limit hit: $-40.70
+   ⚠️  Daily loss limit hit: $-39.93
+   ⚠️  Daily loss limit hit: $-37.83
+   ⚠️  Daily loss limit hit: $-38.58
+   ⚠️  Daily loss limit hit: $-36.30
+   ⚠️  Daily loss limit hit: $-26.11
+   ⚠️  Daily loss limit hit: $-45.85
+   ⚠️  Daily loss limit hit: $-30.52
+   ⚠️  Daily loss limit hit: $-41.35
+   ⚠️  Daily loss limit hit: $-58.22
+   ⚠️  Daily loss limit hit: $-73.18
+   ⚠️  Daily loss limit hit: $-85.84
+   ⚠️  Daily loss limit hit: $-38.87
+   ⚠️  Daily loss limit hit: $-37.53
+   ⚠️  Daily loss limit hit: $-62.08
+   ⚠️  Daily loss limit hit: $-54.40
+   ⚠️  Daily loss limit hit: $-88.10
+   ⚠️  Daily loss limit hit: $-23.25
+   ⚠️  Daily loss limit hit: $-25.54
+   ⚠️  Daily loss limit hit: $-37.46
+   ⚠️  Daily loss limit hit: $-83.65
+   ⚠️  Daily loss limit hit: $-30.78
+   ⚠️  Daily loss limit hit: $-45.18
+   ⚠️  Daily loss limit hit: $-124.14
+   ⚠️  Daily loss limit hit: $-66.00
+   ⚠️  Daily loss limit hit: $-113.42
+   ⚠️  Daily loss limit hit: $-112.82
+   ⚠️  Daily loss limit hit: $-122.33
+   ⚠️  Daily loss limit hit: $-90.32
+   ⚠️  Daily loss limit hit: $-146.18
+   ⚠️  Daily loss limit hit: $-137.25
+   ⚠️  Daily loss limit hit: $-148.16
+   ⚠️  Daily loss limit hit: $-140.18
+   ⚠️  Daily loss limit hit: $-94.62
+   ⚠️  Daily loss limit hit: $-27.63
+   ⚠️  Daily loss limit hit: $-129.77
+   ⚠️  Daily loss limit hit: $-123.00
+   ⚠️  Daily loss limit hit: $-42.54
+   ⚠️  Daily loss limit hit: $-66.62
+   ✅ Backtest complete. Total trades: 344
+
+================================================================================
+  RESULTS
+================================================================================
+  Total Return:          982.99%
+  Final Capital:     $  2,165.97
+  Total Trades:             344
+  Win Rate:               61.05%
+  Avg Win:           $     34.59
+  Avg Loss:          $    -37.04
+  Profit Factor:           1.46
+  Max Drawdown:           36.77%
+  Sharpe Ratio:            0.53
+================================================================================
+
+📊 Creating visualization...
+   ✅ Saved: backtest_results_v2.png

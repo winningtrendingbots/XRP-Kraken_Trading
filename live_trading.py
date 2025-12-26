@@ -75,9 +75,9 @@ class ProductionConfig:
     # Limits
     PROFIT_CLOSE = 50
     MAX_DAILY_LOSS = -20
-    MAX_POSITIONS = 15
+    MAX_POSITIONS = 1
     SAME_DIRECTION_ONLY = False
-    MAX_BARS_IN_TRADE = 48
+    MAX_BARS_IN_TRADE = 2
     
     # Leverage
     LEVERAGE_MIN = 2

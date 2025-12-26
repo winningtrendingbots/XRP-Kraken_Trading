@@ -43,13 +43,13 @@ class ProductionConfig:
     TELEGRAM_CHAT_ID = os.getenv('TELEGRAM_CHAT_ID')
     
     # Trading
-    SYMBOL = 'XRP-USD'
-    KRAKEN_PAIR = 'XXRPZUSD'  # Formato Kraken
-    INTERVAL = 60  # minutos
+    SYMBOL = 'ETH-USD'
+    KRAKEN_PAIR = 'XETHZUSD'  # Formato Kraken
+    INTERVAL = 15  # minutos
     LOOKBACK_PERIODS = 200  # Cuántas velas históricas cargar
     
     # Estrategia (igual que backtest)
-    VOLUME_SMOOTH_PERIODS = 4
+    VOLUME_SMOOTH_PERIODS = 3
     ACCEL_BARS_REQUIRED = 2
     
     # Confirmaciones
@@ -65,7 +65,7 @@ class ProductionConfig:
     INITIAL_CAPITAL = 10000  # Solo para referencia
     RISK_PER_TRADE = 0.05
     TP_POINTS = 100
-    ATR_STOP_MULTIPLIER = 1.0
+    ATR_STOP_MULTIPLIER = 2.0
     
     # Trailing Stop
     USE_TRAILING_STOP = True
@@ -74,14 +74,14 @@ class ProductionConfig:
     
     # Limits
     PROFIT_CLOSE = 50
-    MAX_DAILY_LOSS = -20
-    MAX_POSITIONS = 1
+    MAX_DAILY_LOSS = -200
+    MAX_POSITIONS = 15
     SAME_DIRECTION_ONLY = False
-    MAX_BARS_IN_TRADE = 2
+    MAX_BARS_IN_TRADE = 48
     
     # Leverage
-    LEVERAGE_MIN = 4
-    LEVERAGE_MAX = 10
+    LEVERAGE_MIN = 2
+    LEVERAGE_MAX = 5
     
     # Trading Hours
     USE_TRADING_HOURS = True
@@ -105,6 +105,20 @@ class ProductionConfig:
 def calculate_volume_derivatives(df, config):
     """Calcular derivadas de volumen"""
     df = df.copy()
+    
+    # Asegurar que 'volume' existe y es numérico
+    if 'volume' not in df.columns:
+        logger.error(f"Columna 'volume' no encontrada. Columnas: {df.columns.tolist()}")
+        raise ValueError("Columna 'volume' requerida")
+    
+    df['volume'] = pd.to_numeric(df['volume'], errors='coerce')
+    df['volume'] = df['volume'].ffill().fillna(0)
+    
+    # Si todo el volumen es 0, crear volumen sintético
+    if df['volume'].sum() == 0 or df['volume'].mean() < 1:
+        logger.warning("Volumen insuficiente, sintetizando...")
+        price_range = df['high'] - df['low']
+        df['volume'] = price_range * 100000  # Volumen sintético simple
     
     df['Volume_Smoothed'] = df['volume'].rolling(
         window=config.VOLUME_SMOOTH_PERIODS, 
@@ -145,6 +159,38 @@ def calculate_volume_derivatives(df, config):
 def add_technical_indicators(df):
     """Agregar indicadores técnicos"""
     df = df.copy()
+    
+    # Asegurar nombres de columnas correctos (pykrakenapi usa minúsculas)
+    # Renombrar si es necesario
+    column_mapping = {
+        'high': 'high',
+        'low': 'low', 
+        'close': 'close',
+        'open': 'open',
+        'volume': 'volume',
+        'vwap': 'vwap',
+        'count': 'count'
+    }
+    
+    # Verificar y limpiar datos
+    for col in ['high', 'low', 'close', 'open', 'volume']:
+        if col not in df.columns:
+            logger.error(f"Columna {col} no encontrada. Columnas disponibles: {df.columns.tolist()}")
+            raise ValueError(f"Columna requerida {col} no existe")
+        
+        # Convertir a float y eliminar NaN/None
+        df[col] = pd.to_numeric(df[col], errors='coerce')
+        
+    # Rellenar valores faltantes con forward fill
+    df[['high', 'low', 'close', 'open', 'volume']] = df[['high', 'low', 'close', 'open', 'volume']].ffill()
+    
+    # Si todavía hay NaN al principio, usar backfill
+    df[['high', 'low', 'close', 'open', 'volume']] = df[['high', 'low', 'close', 'open', 'volume']].bfill()
+    
+    # Verificar que no haya más NaN
+    if df[['high', 'low', 'close']].isnull().any().any():
+        logger.error("Datos contienen valores NaN después de limpieza")
+        raise ValueError("Datos inválidos con NaN")
     
     df['ADX'] = ta.trend.adx(df['high'], df['low'], df['close'], window=14)
     df['ADX_pos'] = ta.trend.adx_pos(df['high'], df['low'], df['close'], window=14)
@@ -329,6 +375,16 @@ class LiveTrader:
                 logger.error("No se pudieron obtener datos suficientes")
                 self.telegram.notify_error("Error obteniendo datos de mercado")
                 return
+            
+            logger.info(f"Datos descargados: {len(df)} velas")
+            logger.info(f"Columnas: {df.columns.tolist()}")
+            logger.info(f"Últimas 3 velas:\n{df.tail(3)}")
+            
+            # Verificar que hay datos válidos
+            if df['close'].isnull().any():
+                logger.warning("Hay valores nulos en close, limpiando...")
+                df = df.dropna(subset=['close', 'high', 'low', 'open', 'volume'])
+                logger.info(f"Después de limpieza: {len(df)} velas")
             
             # Calcular indicadores
             logger.info("Calculando indicadores...")

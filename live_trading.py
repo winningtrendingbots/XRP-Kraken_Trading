@@ -80,8 +80,8 @@ class ProductionConfig:
     MAX_BARS_IN_TRADE = 2
     
     # Leverage
-    LEVERAGE_MIN = 2
-    LEVERAGE_MAX = 5
+    LEVERAGE_MIN = 4
+    LEVERAGE_MAX = 10
     
     # Trading Hours
     USE_TRADING_HOURS = True

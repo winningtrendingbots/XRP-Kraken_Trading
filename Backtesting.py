@@ -1,4 +1,4 @@
-!pip install yfinance>=0.2.28 pandas>=2.0.0 numpy>=1.24.0 matplotlib>=3.7.0 seaborn>=0.12.0 scikit-learn>=1.3.0 tensorflow>=2.13.0 ta>=0.11.0
+#!pip install yfinance>=0.2.28 pandas>=2.0.0 numpy>=1.24.0 matplotlib>=3.7.0 seaborn>=0.12.0 scikit-learn>=1.3.0 tensorflow>=2.13.0 ta>=0.11.0
 
 """
 COMPLETE VOLUME + OHLC TRADING STRATEGY V2

@@ -45,7 +45,7 @@ class ProductionConfig:
     # Trading
     SYMBOL = 'XRP-USD'
     KRAKEN_PAIR = 'XXRPZUSD'  # Formato Kraken
-    INTERVAL = 15  # minutos
+    INTERVAL = 60  # minutos
     LOOKBACK_PERIODS = 200  # Cuántas velas históricas cargar
     
     # Estrategia (igual que backtest)

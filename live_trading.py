@@ -65,7 +65,7 @@ class ProductionConfig:
     INITIAL_CAPITAL = 10000  # Solo para referencia
     RISK_PER_TRADE = 0.05
     TP_POINTS = 100
-    ATR_STOP_MULTIPLIER = 2.0
+    ATR_STOP_MULTIPLIER = 1.0
     
     # Trailing Stop
     USE_TRAILING_STOP = True
@@ -74,10 +74,10 @@ class ProductionConfig:
     
     # Limits
     PROFIT_CLOSE = 50
-    MAX_DAILY_LOSS = -200
-    MAX_POSITIONS = 15
+    MAX_DAILY_LOSS = -20
+    MAX_POSITIONS = 1
     SAME_DIRECTION_ONLY = False
-    MAX_BARS_IN_TRADE = 48
+    MAX_BARS_IN_TRADE = 2
     
     # Leverage
     LEVERAGE_MIN = 2

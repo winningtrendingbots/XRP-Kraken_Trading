@@ -43,13 +43,13 @@ class ProductionConfig:
     TELEGRAM_CHAT_ID = os.getenv('TELEGRAM_CHAT_ID')
     
     # Trading
-    SYMBOL = 'ETH-USD'
-    KRAKEN_PAIR = 'XETHZUSD'  # Formato Kraken
-    INTERVAL = 15  # minutos
+    SYMBOL = 'XRP-USD'
+    KRAKEN_PAIR = 'XXRPZUSD'  # Formato Kraken
+    INTERVAL = 60  # minutos
     LOOKBACK_PERIODS = 200  # Cuántas velas históricas cargar
     
     # Estrategia (igual que backtest)
-    VOLUME_SMOOTH_PERIODS = 3
+    VOLUME_SMOOTH_PERIODS = 4
     ACCEL_BARS_REQUIRED = 2
     
     # Confirmaciones

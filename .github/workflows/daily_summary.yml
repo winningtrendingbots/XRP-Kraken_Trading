@@ -1,15 +1,15 @@
-name: Kraken Trading Bot
+name: Daily Trading Summary
 
 on:
   schedule:
-    # Ejecutar cada 15 minutos
-    - cron: '*/15 * * * *'
+    # Ejecutar todos los días a las 23:55 UTC
+    - cron: '55 23 * * *'
   
   # Permitir ejecución manual
   workflow_dispatch:
 
 jobs:
-  trade:
+  summary:
     runs-on: ubuntu-latest
     
     steps:
@@ -27,59 +27,20 @@ jobs:
           pip install --upgrade pip
           pip install -r requirements.txt
       
-      - name: Restaurar estado previo
+      - name: Restaurar estado
         uses: actions/cache/restore@v4
         with:
           path: |
             trading_state.json
-            trading.log
-          key: trading-state-${{ github.run_number }}
+          key: trading-state-
           restore-keys: |
             trading-state-
       
-      - name: Ejecutar bot de trading
+      - name: Generar y enviar resumen diario
         env:
           KRAKEN_API_KEY: ${{ secrets.KRAKEN_API_KEY }}
           KRAKEN_API_SECRET: ${{ secrets.KRAKEN_API_SECRET }}
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
         run: |
-          python live_trading.py
-      
-      - name: Guardar estado
-        uses: actions/cache/save@v4
-        if: always()
-        with:
-          path: |
-            trading_state.json
-            trading.log
-          key: trading-state-${{ github.run_number }}
-      
-      - name: Subir logs como artifact
-        uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: trading-logs-${{ github.run_number }}
-          path: |
-            trading.log
-            trading_state.json
-          retention-days: 30
-      
-      - name: Notificar error
-        if: failure()
-        run: |
-          python -c "
-          import os
-          import requests
-          
-          token = os.getenv('TELEGRAM_BOT_TOKEN')
-          chat_id = os.getenv('TELEGRAM_CHAT_ID')
-          
-          if token and chat_id:
-              url = f'https://api.telegram.org/bot{token}/sendMessage'
-              message = '❌ ERROR EN GITHUB ACTIONS\n\nEl workflow de trading falló. Revisar logs.'
-              requests.post(url, json={'chat_id': chat_id, 'text': message})
-          "
-        env:
-          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
-          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          python daily_summary.py

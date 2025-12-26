@@ -43,13 +43,13 @@ class ProductionConfig:
     TELEGRAM_CHAT_ID = os.getenv('TELEGRAM_CHAT_ID')
     
     # Trading
-    SYMBOL = 'ETH-USD'
-    KRAKEN_PAIR = 'XETHZUSD'  # Formato Kraken
+    SYMBOL = 'XRP-USD'
+    KRAKEN_PAIR = 'XXRPZUSD'  # Formato Kraken
     INTERVAL = 15  # minutos
     LOOKBACK_PERIODS = 200  # Cuántas velas históricas cargar
     
     # Estrategia (igual que backtest)
-    VOLUME_SMOOTH_PERIODS = 3
+    VOLUME_SMOOTH_PERIODS = 4
     ACCEL_BARS_REQUIRED = 2
     
     # Confirmaciones
@@ -65,7 +65,7 @@ class ProductionConfig:
     INITIAL_CAPITAL = 10000  # Solo para referencia
     RISK_PER_TRADE = 0.05
     TP_POINTS = 100
-    ATR_STOP_MULTIPLIER = 2.0
+    ATR_STOP_MULTIPLIER = 1.0
     
     # Trailing Stop
     USE_TRAILING_STOP = True
@@ -74,14 +74,14 @@ class ProductionConfig:
     
     # Limits
     PROFIT_CLOSE = 50
-    MAX_DAILY_LOSS = -200
+    MAX_DAILY_LOSS = -20
     MAX_POSITIONS = 15
     SAME_DIRECTION_ONLY = False
     MAX_BARS_IN_TRADE = 48
     
     # Leverage
     LEVERAGE_MIN = 2
-    LEVERAGE_MAX = 5
+    LEVERAGE_MAX = 10
     
     # Trading Hours
     USE_TRADING_HOURS = True

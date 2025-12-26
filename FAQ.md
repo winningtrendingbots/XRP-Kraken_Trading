@@ -46,6 +46,34 @@ Kraken no ofrece cuenta demo con API. Alternativas:
 
 ## Problemas Comunes
 
+### Error: "TypeError: '>=' not supported between instances of 'float' and 'NoneType'"
+
+**Causa:** Los datos descargados de Kraken contienen valores nulos o la estructura no es la esperada.
+
+**Solución:**
+
+1. **Ejecuta el script de diagnóstico:**
+   ```bash
+   export $(cat .env | xargs)
+   python debug_data.py
+   ```
+   Esto mostrará exactamente qué hay en los datos.
+
+2. **Verifica el par de trading:**
+   - ETH/USD en Kraken es `XETHZUSD`
+   - XRP/USD en Kraken es `XXRPZUSD`
+   - BTC/USD en Kraken es `XXBTZUSD`
+
+3. **El código actualizado ya maneja esto:**
+   - Limpia valores nulos automáticamente
+   - Rellena gaps con forward/backward fill
+   - Valida datos antes de calcular indicadores
+
+4. **Si sigue fallando:**
+   - Revisa los logs detallados en GitHub Actions
+   - Verifica que el par tiene liquidez suficiente
+   - Prueba con otro par (ej: XXBTZUSD para Bitcoin)
+
 ### El bot no ejecuta ninguna orden
 
 **Posibles causas:**
